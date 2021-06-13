@@ -21,6 +21,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import javax.annotation.Nonnull;
+
+import io.jenkins.plugins.conventionalcommits.utils.GetCurrentVersion;
 import jenkins.SlaveToMasterFileCallable;
 import org.apache.commons.lang.StringUtils;
 import org.jenkinsci.plugins.workflow.steps.Step;
@@ -100,7 +102,8 @@ public class NextVersionStep extends Step {
                     }
                 }
 
-                Version currentVersion = Version.valueOf(latestTag.isEmpty() ? "0.0.0" : latestTag);
+                Version currentVersion = new GetCurrentVersion().getCurrentVersion(dir, latestTag);
+
                 String commitMessagesString = null;
                 if (latestTag.isEmpty()) {
                     commitMessagesString = execute(dir,"git", "log", "--pretty=format:%s").trim();
